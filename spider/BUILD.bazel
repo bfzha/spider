@@ -40,6 +40,7 @@ rust_library(
         "@crates_io//:tokio",
         "@crates_io//:reqwest",
         "@crates_io//:libc",
+        "@crates_io//:flexbuffers",
     ] + select({
         "//:serde_enabled": [
             "@crates_io//:serde",
@@ -160,6 +161,8 @@ rust_library(
         'feature="encoding"',
         "--cfg",
         'feature="time"',
+        "--cfg",
+        'feature="flexbuffers"',
     ] + select({
         "//:serde_enabled": [
             "--cfg",

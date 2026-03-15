@@ -21,7 +21,6 @@ rust_library(
     ] + select({
         "//:serde_enabled": [
             "@crates_io//:serde",
-            "@crates_io//:indexmap",
         ],
         "//conditions:default": [],
     }),
