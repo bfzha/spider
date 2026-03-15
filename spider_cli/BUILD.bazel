@@ -12,6 +12,7 @@ rust_binary(
     edition = "2021",
     deps = [
         "//spider:spider",
+        "//spider_utils:spider_utils",
         "@crates_io//:clap",
         "@crates_io//:env_logger",
         "@crates_io//:serde_json",

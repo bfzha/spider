@@ -471,17 +471,17 @@
           "REPO_MAPPING:rules_rust+,bazel_tools bazel_tools",
           "REPO_MAPPING:rules_rust+,rules_cc rules_cc+",
           "REPO_MAPPING:rules_rust+,rules_rust rules_rust+",
-          "FILE:@@//Cargo.lock de1a6d3b0a55a69bd32cb49acc1464ed9bb3058b56fab17bf026dc574c1fbaac",
+          "FILE:@@//Cargo.lock 38e0205dcca3ab9a16d6f30ee2f9d5b7574a6f56c904bf35cab7ccf91eb678fa",
           "FILE:@@//Cargo.toml 4c23cde48f2e4414e7702e433afe88f5a60372de7b80c37ba1c58f831d66bf69",
           "FILE:@@//spider/Cargo.toml 862cc60801bb307415ccf064bf9961459ea2e3ac1887ec1377ddd5eef7d4e1d4",
-          "FILE:@@//spider_cli/Cargo.toml a9fcc46ec9c68929a448a67d6fd2ac9736404fc2f2fbdc30a2705b2a4d59d396",
+          "FILE:@@//spider_cli/Cargo.toml 1d0cee581004f8e73ce9de5335043b68b09413e7b5f590a391abf35443f0df0a",
           "FILE:@@//spider_worker/Cargo.toml c6c2737698effac52e9879590f25b09887a0fe965cc3c9ab3f9e4d13afee1861",
           "FILE:@@//spider_agent/Cargo.toml 0975bcba165c088bc7cdb4ee93702aa53609d42506cbd639f72cbd9e2b1bc3cb",
           "FILE:@@//spider_agent_types/Cargo.toml 19b3b06a078973aec7844045d9703afca4d6660b7fc597b0b80189ae3b266ecc",
           "FILE:@@//spider_agent_html/Cargo.toml dd7eb0d2dc5b6a07fe0523b25e0f3f6b01291beac1d764181813bb1c97a09803",
           "FILE:@@//spider_utils/Cargo.toml 38f1e361fa475131bf2b832fdc7f262a3783a090ca4692e4eb1ee2a9f42a9b1d",
           "FILE:@@//benches/Cargo.toml c331ee14886926cab49ba61988f938f2cdb279e4735143e8d55f72f0beb470e0",
-          "FILE:@@//examples/Cargo.toml 819a32376c6b9a93c941f295285c63711e37bf3d003b572e808654376dfd5088"
+          "FILE:@@//examples/Cargo.toml 20ab3ae02cec04cd7f042cf6912f527f184eb84e3e0b1cfaff97100acdefd03a"
         ],
         "generatedRepoSpecs": {
           "crates_io": {
