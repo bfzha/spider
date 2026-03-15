@@ -1,0 +1,29 @@
+"""
+Spider CLI - The fastest web crawler CLI written in Rust.
+"""
+
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_binary(
+    name = "spider",
+    srcs = glob(["src/**/*.rs"]),
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:clap",
+        "@crates_io//:env_logger",
+        "@crates_io//:serde_json",
+        "@crates_io//:percent-encoding",
+        "@crates_io//:unicode-normalization",
+        "@crates_io//:tokio",
+    ],
+    rustc_flags = [] + select({
+        "//:chrome_enabled": [
+            "--cfg",
+            'feature="chrome"',
+        ],
+        "//conditions:default": [],
+    }),
+)

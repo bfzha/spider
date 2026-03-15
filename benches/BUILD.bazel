@@ -1,0 +1,47 @@
+"""
+Benchmarks - Performance benchmarks for Spider (Rust benchmarks).
+Go and Node.js support available when configured.
+"""
+
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+# Rust crawl benchmark
+rust_binary(
+    name = "crawl_bench",
+    srcs = ["crawl.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "//spider_utils:spider_utils",
+        "@crates_io//:criterion",
+        "@crates_io//:tokio",
+    ],
+    rustc_flags = [
+        "--cfg",
+        'feature="async_tokio"',
+        "--cfg",
+        'feature="html_reports"',
+    ],
+    testonly = True,
+)
+
+# Rust core benchmark
+rust_binary(
+    name = "core_bench",
+    srcs = ["core.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:criterion",
+        "@crates_io//:tokio",
+    ],
+    rustc_flags = [
+        "--cfg",
+        'feature="async_tokio"',
+        "--cfg",
+        'feature="html_reports"',
+    ],
+    testonly = True,
+)

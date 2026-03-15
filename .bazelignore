@@ -1,0 +1,25 @@
+# Bazel output directories
+bazel-out
+bazel-bin
+bazel-testlogs
+bazel-genfiles
+
+# Bazel workspace symlinks
+bazel-*
+
+# Bazel cache
+.bazel_cache
+
+# User-specific bazelrc
+.bazelrc.user
+
+# Generated files from crate_universe
+crates_io_*.json
+
+# Go module files (managed by Bazel)
+go.mod
+go.sum
+
+# Node modules (managed by Bazel)
+node_modules/
+package-lock.json

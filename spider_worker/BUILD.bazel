@@ -1,0 +1,25 @@
+"""
+Spider Worker - The fastest web crawler as a worker or proxy.
+"""
+
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_binary(
+    name = "spider_worker",
+    srcs = ["src/main.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:warp",
+        "@crates_io//:lazy_static",
+        "@crates_io//:env_logger",
+    ],
+    rustc_flags = [
+        "--cfg",
+        'feature="serde"',
+        "--cfg",
+        'feature="flexbuffers"',
+    ],
+)

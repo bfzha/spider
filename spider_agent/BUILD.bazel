@@ -1,0 +1,59 @@
+"""
+Spider Agent - A concurrent-safe multimodal agent for web automation and research.
+"""
+
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "spider_agent",
+    srcs = glob(["src/**/*.rs"]),
+    edition = "2021",
+    deps = [
+        "//spider_agent_types:spider_agent_types",
+        "//spider_agent_html:spider_agent_html",
+        "@crates_io//:tokio",
+        "@crates_io//:reqwest",
+        "@crates_io//:serde",
+        "@crates_io//:serde_json",
+        "@crates_io//:log",
+        "@crates_io//:thiserror",
+        "@crates_io//:dashmap",
+        "@crates_io//:parking_lot",
+        "@crates_io//:base64",
+        "@crates_io//:lol_html",
+        "@crates_io//:aho-corasick",
+        "@crates_io//:llm_models_spider",
+    ] + select({
+        "//:openai_enabled": [
+            "@crates_io//:async-openai",
+            "@crates_io//:tiktoken-rs",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:chrome_enabled": [
+            "@crates_io//:chromey",
+            "@crates_io//:futures",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:webdriver_enabled": [
+            "@crates_io//:thirtyfour",
+        ],
+        "//conditions:default": [],
+    }),
+    proc_macro_deps = [
+        "@crates_io//:async-trait",
+    ],
+    rustc_flags = [] + select({
+        "//:openai_enabled": ["--cfg", 'feature="openai"'],
+        "//conditions:default": [],
+    }) + select({
+        "//:chrome_enabled": ["--cfg", 'feature="chrome"'],
+        "//conditions:default": [],
+    }) + select({
+        "//:webdriver_enabled": ["--cfg", 'feature="webdriver"'],
+        "//conditions:default": [],
+    }),
+)

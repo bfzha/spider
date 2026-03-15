@@ -1,0 +1,25 @@
+"""
+Spider Agent HTML - HTML processing utilities for spider_agent.
+Cleaning, content analysis, and diffing.
+"""
+
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "spider_agent_html",
+    srcs = glob(["src/**/*.rs"]),
+    edition = "2021",
+    deps = [
+        "//spider_agent_types:spider_agent_types",
+        "@crates_io//:lol_html",
+        "@crates_io//:aho-corasick",
+        "@crates_io//:serde",
+        "@crates_io//:serde_json",
+    ],
+    rustc_flags = [
+        "--cfg",
+        'feature="serde"',
+    ],
+)

@@ -1,0 +1,32 @@
+"""
+Spider Utils - Utilities to use for Spider Web Crawler.
+"""
+
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "spider_utils",
+    srcs = glob(["src/**/*.rs"]),
+    edition = "2021",
+    deps = [
+        "@crates_io//:sxd-document",
+        "@crates_io//:sxd-xpath",
+        "@crates_io//:lazy_static",
+        "@crates_io//:tokio-stream",
+        "@crates_io//:hashbrown",
+        "@crates_io//:log",
+        "@crates_io//:spider_scraper",
+    ] + select({
+        "//:serde_enabled": [
+            "@crates_io//:serde",
+            "@crates_io//:indexmap",
+        ],
+        "//conditions:default": [],
+    }),
+    rustc_flags = [] + select({
+        "//:serde_enabled": ["--cfg", 'feature="serde"'],
+        "//conditions:default": [],
+    }),
+)

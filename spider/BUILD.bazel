@@ -1,0 +1,320 @@
+"""
+Spider - A web crawler and scraper, building blocks for data curation workloads.
+Core library with extensive feature flag support.
+"""
+
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "spider",
+    srcs = glob(["src/**/*.rs"]),
+    edition = "2021",
+    deps = [
+        "//spider_agent_types:spider_agent_types",
+        # Core dependencies
+        "@crates_io//:url",
+        "@crates_io//:tokio-stream",
+        "@crates_io//:hashbrown",
+        "@crates_io//:log",
+        "@crates_io//:percent-encoding",
+        "@crates_io//:regex",
+        "@crates_io//:string_concat",
+        "@crates_io//:lazy_static",
+        "@crates_io//:ahash",
+        "@crates_io//:smallvec",
+        "@crates_io//:num_cpus",
+        "@crates_io//:bytes",
+        "@crates_io//:case_insensitive_string",
+        "@crates_io//:strum",
+        "@crates_io//:lol_html",
+        "@crates_io//:quick-xml",
+        "@crates_io//:phf",
+        "@crates_io//:auto_encoder",
+        "@crates_io//:aho-corasick",
+        "@crates_io//:h2",
+        "@crates_io//:tower",
+        "@crates_io//:pin-project-lite",
+        "@crates_io//:spider_fingerprint",
+        "@crates_io//:tokio",
+        "@crates_io//:reqwest",
+        "@crates_io//:libc",
+    ] + select({
+        "//:serde_enabled": [
+            "@crates_io//:serde",
+            "@crates_io//:serde_json",
+            "@crates_io//:serde_regex",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:chrome_enabled": [
+            "@crates_io//:chromey",
+            "@crates_io//:base64",
+            "@crates_io//:rand",
+            "@crates_io//:fastrand",
+            "@crates_io//:which",
+            "@crates_io//:home",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:openai_enabled": [
+            "@crates_io//:async-openai",
+            "@crates_io//:tiktoken-rs",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:gemini_enabled": [
+            "@crates_io//:gemini-rust",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:io_uring_enabled": [
+            "@crates_io//:io-uring",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:webdriver_enabled": [
+            "@crates_io//:thirtyfour",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:cache_enabled": [
+            "@crates_io//:http-global-cache",
+            "@crates_io//:reqwest-middleware",
+            "@crates_io//:http-cache-reqwest",
+            "@crates_io//:http",
+            "@crates_io//:http-cache",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:cache_mem_enabled": [
+            "@crates_io//:http-global-cache",
+            "@crates_io//:reqwest-middleware",
+            "@crates_io//:http-cache-reqwest",
+            "@crates_io//:http",
+            "@crates_io//:http-cache",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:sitemap_enabled": [
+            "@crates_io//:sitemap",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:cron_enabled": [
+            "@crates_io//:async_job",
+            "@crates_io//:chrono",
+            "@crates_io//:cron",
+            "@crates_io//:async-trait",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:tracing_enabled": [
+            "@crates_io//:tracing",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:firewall_enabled": [
+            "@crates_io//:spider_firewall",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:wreq_enabled": [
+            "@crates_io//:wreq",
+            "@crates_io//:wreq-util",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:glob_enabled": [
+            "@crates_io//:itertools",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:headers_enabled": [
+            "@crates_io//:httpdate",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:cookies_enabled": [
+            "@crates_io//:cookie",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:agent_enabled": [
+            "//spider_agent:spider_agent",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:agent_chrome_enabled": [
+            "//spider_agent:spider_agent",
+            "@crates_io//:dashmap",
+        ],
+        "//conditions:default": [],
+    }),
+    rustc_flags = [
+        # Core feature flags
+        "--cfg",
+        'feature="sync"',
+        "--cfg",
+        'feature="encoding"',
+        "--cfg",
+        'feature="time"',
+    ] + select({
+        "//:serde_enabled": [
+            "--cfg",
+            'feature="serde"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:chrome_enabled": [
+            "--cfg",
+            'feature="chrome"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:openai_enabled": [
+            "--cfg",
+            'feature="openai"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:gemini_enabled": [
+            "--cfg",
+            'feature="gemini"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:io_uring_enabled": [
+            "--cfg",
+            'feature="io_uring"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:webdriver_enabled": [
+            "--cfg",
+            'feature="webdriver"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:cache_enabled": [
+            "--cfg",
+            'feature="cache"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:cache_mem_enabled": [
+            "--cfg",
+            'feature="cache_mem"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:sitemap_enabled": [
+            "--cfg",
+            'feature="sitemap"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:smart_enabled": [
+            "--cfg",
+            'feature="smart"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:cron_enabled": [
+            "--cfg",
+            'feature="cron"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:tracing_enabled": [
+            "--cfg",
+            'feature="tracing"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:firewall_enabled": [
+            "--cfg",
+            'feature="firewall"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:wreq_enabled": [
+            "--cfg",
+            'feature="wreq"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:spider_cloud_enabled": [
+            "--cfg",
+            'feature="spider_cloud"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:glob_enabled": [
+            "--cfg",
+            'feature="glob"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:headers_enabled": [
+            "--cfg",
+            'feature="headers"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:cookies_enabled": [
+            "--cfg",
+            'feature="cookies"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:full_resources_enabled": [
+            "--cfg",
+            'feature="full_resources"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:socks_enabled": [
+            "--cfg",
+            'feature="socks"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:agent_enabled": [
+            "--cfg",
+            'feature="agent"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:agent_openai_enabled": [
+            "--cfg",
+            'feature="agent_openai"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:agent_chrome_enabled": [
+            "--cfg",
+            'feature="agent_chrome"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:agent_webdriver_enabled": [
+            "--cfg",
+            'feature="agent_webdriver"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:agent_skills_enabled": [
+            "--cfg",
+            'feature="agent_skills"',
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//:agent_full_enabled": [
+            "--cfg",
+            'feature="agent_full"',
+        ],
+        "//conditions:default": [],
+    }),
+)

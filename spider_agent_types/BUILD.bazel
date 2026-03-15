@@ -1,0 +1,24 @@
+"""
+Spider Agent Types - Pure data types and constants for spider_agent automation.
+Zero heavy dependencies.
+"""
+
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "spider_agent_types",
+    srcs = glob(["src/**/*.rs"]),
+    edition = "2021",
+    deps = [
+        "@crates_io//:serde",
+        "@crates_io//:serde_json",
+        "@crates_io//:aho-corasick",
+        "@crates_io//:llm_models_spider",
+    ],
+    rustc_flags = [
+        "--cfg",
+        'feature="serde"',
+    ],
+)

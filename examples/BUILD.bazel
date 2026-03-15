@@ -1,0 +1,156 @@
+"""
+Spider Examples - Example code demonstrating Spider usage.
+"""
+
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+# Basic example
+rust_binary(
+    name = "example",
+    srcs = ["example.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# Scrape example
+rust_binary(
+    name = "scrape",
+    srcs = ["scrape.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# Debug example
+rust_binary(
+    name = "debug",
+    srcs = ["debug.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+        "@crates_io//:env_logger",
+    ],
+)
+
+# Download example
+rust_binary(
+    name = "download",
+    srcs = ["download.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# Serde example
+rust_binary(
+    name = "serde_example",
+    srcs = ["serde.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+        "@crates_io//:serde_json",
+    ],
+    rustc_flags = [
+        "--cfg",
+        'feature="serde"',
+    ],
+)
+
+# Callback example
+rust_binary(
+    name = "callback",
+    srcs = ["callback.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# Configuration example
+rust_binary(
+    name = "configuration",
+    srcs = ["configuration.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# Blacklist example
+rust_binary(
+    name = "blacklist",
+    srcs = ["blacklist.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# Whitelist example
+rust_binary(
+    name = "whitelist",
+    srcs = ["whitelist.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# Advanced configuration example
+rust_binary(
+    name = "advanced_configuration",
+    srcs = ["advanced_configuration.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# Queue example
+rust_binary(
+    name = "queue",
+    srcs = ["queue.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# CSS scrape example
+rust_binary(
+    name = "css_scrape",
+    srcs = ["css_scrape.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)
+
+# Subscribe download example
+rust_binary(
+    name = "subscribe_download",
+    srcs = ["subscribe_download.rs"],
+    edition = "2021",
+    deps = [
+        "//spider:spider",
+        "@crates_io//:tokio",
+    ],
+)

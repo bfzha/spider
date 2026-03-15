@@ -1,0 +1,95 @@
+# Spider workspace - Bazel build configuration
+# Migration from Cargo to Bazel for multi-language support (Rust + Go + Node.js)
+
+workspace(name = "spider")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+###############################################################################
+# Rust toolchain setup
+###############################################################################
+
+http_archive(
+    name = "rules_rust",
+    sha256 = "e494ee5af94068e3b8e5e9d70e31e8d66ff6b1d95f51c0c26468b71c82c5c2b3",
+    urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.56.0/rules_rust-0.56.0.tar.gz"],
+)
+
+load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains")
+
+rules_rust_dependencies()
+
+rust_register_toolchains()
+
+###############################################################################
+# crate_universe for Cargo dependencies
+###############################################################################
+
+load("@rules_rust//crate_universe:repositories.bzl", "crate_universe_dependencies")
+
+crate_universe_dependencies(bootstrapped = True)
+
+# Load the crates repository generated from Cargo.lock
+load("//:crates.bzl", "crate_repositories")
+
+crate_repositories()
+
+###############################################################################
+# Platform definitions
+###############################################################################
+
+http_archive(
+    name = "platforms",
+    sha256 = "8150406605389ececb6da07cbcb509d5637c03a4f371be18d5dc7e7bc5c77572",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.10/platforms-0.0.10.tar.gz",
+        "https://github.com/bazelbuild/platforms/releases/download/0.0.10/platforms-0.0.10.tar.gz",
+    ],
+)
+
+###############################################################################
+# Skylib for common Bazel utilities
+###############################################################################
+
+http_archive(
+    name = "bazel_skylib",
+    sha256 = "bc283cdfcd526a52c3201279cda4bc298652efa898b10b4db0837dc51652756f",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.7.1/bazel-skylib-1.7.1.tar.gz",
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.7.1/bazel-skylib-1.7.1.tar.gz",
+    ],
+)
+
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+
+bazel_skylib_workspace()
+
+###############################################################################
+# Go toolchain setup (for multi-language benchmarks)
+# Uncomment when Go support is needed
+###############################################################################
+
+# http_archive(
+#     name = "io_bazel_rules_go",
+#     urls = ["https://github.com/bazelbuild/rules_go/releases/download/v0.50.1/rules_go-v0.50.1.zip"],
+# )
+#
+# load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+#
+# go_rules_dependencies()
+# go_register_toolchains()
+
+###############################################################################
+# External spider crates (published on crates.io)
+###############################################################################
+
+# These are external spider ecosystem crates that are published
+# They will be resolved via crate_universe from Cargo.lock
+
+# spider_fingerprint - fingerprinting utilities
+# spider_firewall - firewall detection (optional)
+# spider_scraper - HTML scraping
+# spider_transformations - content transformations
+# spider_skills - skill definitions for agents
+# chromey - Chrome DevTools Protocol implementation
+# llm_models_spider - LLM model capabilities

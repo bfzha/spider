@@ -1,0 +1,340 @@
+"""
+Root BUILD file for Spider project.
+Exports workspace-level files and defines feature flags.
+"""
+
+load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
+
+package(default_visibility = ["//visibility:public"])
+
+# Export workspace files
+exports_files([
+    "Cargo.toml",
+    "Cargo.lock",
+    "LICENSE",
+    "README.md",
+])
+
+###############################################################################
+# Feature Flags
+# These control conditional compilation and dependencies
+###############################################################################
+
+# Core feature flags
+bool_flag(
+    name = "chrome",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "openai",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "gemini",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "io_uring",
+    build_setting_default = True,
+)
+
+bool_flag(
+    name = "serde",
+    build_setting_default = True,
+)
+
+bool_flag(
+    name = "cache",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "cache_mem",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "sitemap",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "smart",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "cron",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "tracing",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "firewall",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "webdriver",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "spider_cloud",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "wreq",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "full_resources",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "socks",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "encoding",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "headers",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "time",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "sync",
+    build_setting_default = True,
+)
+
+bool_flag(
+    name = "cookies",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "glob",
+    build_setting_default = False,
+)
+
+# Agent feature flags
+bool_flag(
+    name = "agent",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "agent_openai",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "agent_chrome",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "agent_webdriver",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "agent_skills",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "agent_full",
+    build_setting_default = False,
+)
+
+bool_flag(
+    name = "docs",
+    build_setting_default = False,
+)
+
+###############################################################################
+# Config Settings for Feature Flags
+# These are used in select() statements
+# Note: config_setting is a native Bazel rule, not loaded from skylib
+###############################################################################
+
+config_setting(
+    name = "chrome_enabled",
+    flag_values = {":chrome": "true"},
+)
+
+config_setting(
+    name = "openai_enabled",
+    flag_values = {":openai": "true"},
+)
+
+config_setting(
+    name = "gemini_enabled",
+    flag_values = {":gemini": "true"},
+)
+
+config_setting(
+    name = "io_uring_enabled",
+    flag_values = {":io_uring": "true"},
+)
+
+config_setting(
+    name = "serde_enabled",
+    flag_values = {":serde": "true"},
+)
+
+config_setting(
+    name = "cache_enabled",
+    flag_values = {":cache": "true"},
+)
+
+config_setting(
+    name = "cache_mem_enabled",
+    flag_values = {":cache_mem": "true"},
+)
+
+config_setting(
+    name = "sitemap_enabled",
+    flag_values = {":sitemap": "true"},
+)
+
+config_setting(
+    name = "smart_enabled",
+    flag_values = {":smart": "true"},
+)
+
+config_setting(
+    name = "cron_enabled",
+    flag_values = {":cron": "true"},
+)
+
+config_setting(
+    name = "tracing_enabled",
+    flag_values = {":tracing": "true"},
+)
+
+config_setting(
+    name = "firewall_enabled",
+    flag_values = {":firewall": "true"},
+)
+
+config_setting(
+    name = "webdriver_enabled",
+    flag_values = {":webdriver": "true"},
+)
+
+config_setting(
+    name = "spider_cloud_enabled",
+    flag_values = {":spider_cloud": "true"},
+)
+
+config_setting(
+    name = "wreq_enabled",
+    flag_values = {":wreq": "true"},
+)
+
+config_setting(
+    name = "agent_enabled",
+    flag_values = {":agent": "true"},
+)
+
+config_setting(
+    name = "agent_openai_enabled",
+    flag_values = {":agent_openai": "true"},
+)
+
+config_setting(
+    name = "agent_chrome_enabled",
+    flag_values = {":agent_chrome": "true"},
+)
+
+config_setting(
+    name = "agent_webdriver_enabled",
+    flag_values = {":agent_webdriver": "true"},
+)
+
+config_setting(
+    name = "agent_skills_enabled",
+    flag_values = {":agent_skills": "true"},
+)
+
+config_setting(
+    name = "agent_full_enabled",
+    flag_values = {":agent_full": "true"},
+)
+
+config_setting(
+    name = "encoding_enabled",
+    flag_values = {":encoding": "true"},
+)
+
+config_setting(
+    name = "headers_enabled",
+    flag_values = {":headers": "true"},
+)
+
+config_setting(
+    name = "time_enabled",
+    flag_values = {":time": "true"},
+)
+
+config_setting(
+    name = "sync_enabled",
+    flag_values = {":sync": "true"},
+)
+
+config_setting(
+    name = "cookies_enabled",
+    flag_values = {":cookies": "true"},
+)
+
+config_setting(
+    name = "glob_enabled",
+    flag_values = {":glob": "true"},
+)
+
+config_setting(
+    name = "full_resources_enabled",
+    flag_values = {":full_resources": "true"},
+)
+
+config_setting(
+    name = "socks_enabled",
+    flag_values = {":socks": "true"},
+)
+
+# Platform config settings
+config_setting(
+    name = "linux",
+    constraint_values = ["@platforms//os:linux"],
+)
+
+config_setting(
+    name = "macos",
+    constraint_values = ["@platforms//os:macos"],
+)
+
+config_setting(
+    name = "windows",
+    constraint_values = ["@platforms//os:windows"],
+)

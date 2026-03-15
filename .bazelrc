@@ -1,0 +1,93 @@
+# Bazel configuration for Spider project
+
+# Build options
+build --incompatible_enable_cc_toolchain_resolution
+
+# Fix for aws-lc-sys jitterentropy: allow crates to control their own optimization
+build --repo_env=CRATE_CC_NO_DEFAULTS=1
+
+# Common build settings
+build --verbose_failures
+build --worker_verbose
+
+# Output formatting
+build --experimental_repository_cache_hardlinks
+
+# Feature flag configurations
+# These can be enabled with --config=<feature_name>
+
+# Chrome browser automation
+build:chrome --//:chrome=true
+
+# OpenAI integration
+build:openai --//:openai=true
+
+# io_uring support (Linux only)
+build:io_uring --//:io_uring=true
+
+# Gemini integration
+build:gemini --//:gemini=true
+
+# WebDriver support
+build:webdriver --//:webdriver=true
+
+# Serde serialization
+build:serde --//:serde=true
+
+# Cache support
+build:cache --//:cache=true
+
+# Sitemap support
+build:sitemap --//:sitemap=true
+
+# Smart crawling
+build:smart --//:smart=true
+
+# Cron scheduling
+build:cron --//:cron=true
+
+# Tracing
+build:tracing --//:tracing=true
+
+# Firewall
+build:firewall --//:firewall=true
+
+# Spider Cloud integration
+build:spider_cloud --//:spider_cloud=true
+
+# Agent features
+build:agent --//:agent=true
+build:agent_openai --//:agent_openai=true
+build:agent_chrome --//:agent_chrome=true
+build:agent_webdriver --//:agent_webdriver=true
+build:agent_skills --//:agent_skills=true
+build:agent_full --//:agent_full=true
+
+# Release build optimization
+build:release --compilation_mode=opt
+build:release --opt_level=3
+build:release --lto=full
+
+# Debug build
+build:debug --compilation_mode=dbg
+
+# Test configuration
+test --test_output=errors
+test --test_tag_filters=-manual
+
+# Platform-specific settings
+build:linux --platforms=@platforms//os:linux
+build:macos --platforms=@platforms//os:macos
+build:windows --platforms=@platforms//os:windows
+
+# Remote cache (optional - uncomment if using remote cache)
+# build --remote_cache=grpc://your-cache-server:9092
+
+# Try to use all available cores
+build --jobs=auto
+
+# Disk cache (separate from output root)
+build --disk_cache=~/.cache/bazel_cache
+
+# Documentation
+build:docs --//:docs=true

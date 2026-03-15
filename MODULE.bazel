@@ -1,0 +1,57 @@
+# Bazel module for Spider project
+# Using Bzlmod with rules_rust crate_universe
+
+module(
+    name = "spider",
+    version = "2.47.22",
+)
+
+# Rust rules (will bring compatible rules_cc)
+bazel_dep(name = "rules_rust", version = "0.63.0")
+
+# Platform definitions
+bazel_dep(name = "platforms", version = "1.0.0")
+
+# Skylib
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+
+# Setup Rust toolchain
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.94.0"],
+)
+use_repo(rust, "rust_toolchains")
+
+# Setup crate_universe for cargo dependencies
+crate = use_extension("@rules_rust//crate_universe:extension.bzl", "crate")
+
+# Import dependencies from Cargo.lock
+# This will create a repository named "crates_io"
+crate.annotation(
+    crate = "aws-lc-sys",
+    build_script_env = {
+        "CRATE_CC_NO_DEFAULTS": "1",
+        "CFLAGS": "-O0",
+        "OPT_LEVEL": "0",
+    },
+)
+
+crate.from_cargo(
+    name = "crates_io",
+    cargo_lockfile = "//:Cargo.lock",
+    manifests = [
+        "//:Cargo.toml",
+        "//spider:Cargo.toml",
+        "//spider_cli:Cargo.toml",
+        "//spider_worker:Cargo.toml",
+        "//spider_agent:Cargo.toml",
+        "//spider_agent_types:Cargo.toml",
+        "//spider_agent_html:Cargo.toml",
+        "//spider_utils:Cargo.toml",
+        "//benches:Cargo.toml",
+        "//examples:Cargo.toml",
+    ],
+)
+
+use_repo(crate, "crates_io")
