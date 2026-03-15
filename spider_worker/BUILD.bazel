@@ -1,0 +1,23 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+load("@crates//:defs.bzl", "aliases", "all_crate_deps")
+load("//bazel:features.bzl", "SPIDER_WORKER_WORKSPACE_FEATURES")
+
+rust_binary(
+    name = "spider_worker",
+    srcs = glob(["src/**/*.rs"]),
+    aliases = aliases(
+        normal = True,
+        proc_macro = True,
+    ),
+    crate_features = SPIDER_WORKER_WORKSPACE_FEATURES,
+    crate_name = "spider_worker",
+    crate_root = "src/main.rs",
+    deps = all_crate_deps(normal = True) + [
+        "//spider:spider_workspace",
+    ],
+    edition = "2021",
+    proc_macro_deps = all_crate_deps(proc_macro = True),
+    version = "2.47.22",
+)

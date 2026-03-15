@@ -1,0 +1,30 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+load("@crates//:defs.bzl", "aliases", "all_crate_deps")
+
+BENCH_TARGETS = [
+    "core",
+    "crawl",
+]
+
+_bench_targets = [
+    rust_binary(
+        name = bench_name,
+        srcs = ["%s.rs" % bench_name],
+        aliases = aliases(
+            normal = True,
+            proc_macro = True,
+        ),
+        crate_root = "%s.rs" % bench_name,
+        deps = all_crate_deps(normal = True) + [
+            "//spider:spider_workspace",
+            "//spider_utils:spider_utils",
+        ],
+        edition = "2021",
+        proc_macro_deps = all_crate_deps(proc_macro = True),
+        tags = ["manual"],
+        version = "0.0.0",
+    )
+    for bench_name in BENCH_TARGETS
+]

@@ -1,0 +1,115 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test")
+load("@crates//:defs.bzl", "aliases", "all_crate_deps")
+load("//bazel:features.bzl", "SPIDER_WORKSPACE_FEATURES")
+
+SPIDER_TESTS = [
+    "chunk_idle_timeout",
+    "live_spider_agent_cloud",
+    "smart_vs_chrome",
+]
+
+rust_library(
+    name = "spider_workspace",
+    srcs = glob(["src/**/*.rs"]),
+    aliases = aliases(
+        normal = True,
+        proc_macro = True,
+    ),
+    crate_features = SPIDER_WORKSPACE_FEATURES,
+    crate_name = "spider",
+    deps = all_crate_deps(normal = True) + [
+        "@@rules_rust++crate+crates__httpdate-1.0.3//:httpdate",
+        "//spider_agent:spider_agent_workspace",
+        "//spider_agent_types:spider_agent_types",
+    ],
+    edition = "2021",
+    proc_macro_deps = all_crate_deps(proc_macro = True),
+    version = "2.47.22",
+)
+
+rust_test(
+    name = "spider_unit_test",
+    crate = ":spider_workspace",
+    aliases = aliases(
+        normal = True,
+        normal_dev = True,
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
+    crate_features = SPIDER_WORKSPACE_FEATURES,
+    deps = all_crate_deps(
+        normal = True,
+        normal_dev = True,
+    ) + [
+        "@@rules_rust++crate+crates__httpdate-1.0.3//:httpdate",
+        "//spider_agent:spider_agent_workspace",
+        "//spider_agent_types:spider_agent_types",
+    ],
+    edition = "2021",
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
+    version = "2.47.22",
+)
+
+rust_test(
+    name = "crawler_test_com",
+    srcs = glob(["tests/crawler_test_com/**/*.rs"]),
+    aliases = aliases(
+        normal = True,
+        normal_dev = True,
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
+    crate_features = SPIDER_WORKSPACE_FEATURES,
+    crate_root = "tests/crawler_test_com/main.rs",
+    deps = all_crate_deps(
+        normal = True,
+        normal_dev = True,
+    ) + [
+        ":spider_workspace",
+        "@@rules_rust++crate+crates__httpdate-1.0.3//:httpdate",
+        "//spider_agent:spider_agent_workspace",
+        "//spider_agent_types:spider_agent_types",
+    ],
+    edition = "2021",
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
+    version = "2.47.22",
+)
+
+_spider_tests = [
+    rust_test(
+        name = test_name,
+        srcs = ["tests/%s.rs" % test_name],
+        aliases = aliases(
+            normal = True,
+            normal_dev = True,
+            proc_macro = True,
+            proc_macro_dev = True,
+        ),
+        crate_features = SPIDER_WORKSPACE_FEATURES,
+        crate_root = "tests/%s.rs" % test_name,
+        deps = all_crate_deps(
+            normal = True,
+            normal_dev = True,
+        ) + [
+            ":spider_workspace",
+            "@@rules_rust++crate+crates__httpdate-1.0.3//:httpdate",
+            "//spider_agent:spider_agent_workspace",
+            "//spider_agent_types:spider_agent_types",
+        ],
+        edition = "2021",
+        proc_macro_deps = all_crate_deps(
+            proc_macro = True,
+            proc_macro_dev = True,
+        ),
+        version = "2.47.22",
+    )
+    for test_name in SPIDER_TESTS
+]

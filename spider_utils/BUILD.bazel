@@ -1,0 +1,42 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test")
+load("@crates//:defs.bzl", "aliases", "all_crate_deps")
+load("//bazel:features.bzl", "SPIDER_UTILS_WORKSPACE_FEATURES")
+
+rust_library(
+    name = "spider_utils",
+    srcs = glob(["src/**/*.rs"]),
+    aliases = aliases(
+        normal = True,
+        proc_macro = True,
+    ),
+    crate_features = SPIDER_UTILS_WORKSPACE_FEATURES,
+    crate_name = "spider_utils",
+    deps = all_crate_deps(normal = True),
+    edition = "2021",
+    proc_macro_deps = all_crate_deps(proc_macro = True),
+    version = "2.47.22",
+)
+
+rust_test(
+    name = "spider_utils_unit_test",
+    crate = ":spider_utils",
+    aliases = aliases(
+        normal = True,
+        normal_dev = True,
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
+    crate_features = SPIDER_UTILS_WORKSPACE_FEATURES,
+    deps = all_crate_deps(
+        normal = True,
+        normal_dev = True,
+    ),
+    edition = "2021",
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
+    version = "2.47.22",
+)

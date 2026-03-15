@@ -11,6 +11,7 @@
 [Guides](https://spider.cloud/guides) |
 [API Docs](https://docs.rs/spider/latest/spider) |
 [Examples](./examples/) |
+[Bazel 迁移说明](./README.bazel.md) |
 [Discord](https://discord.spider.cloud)
 
 A high-performance web crawler and scraper for Rust. [200-1000x faster](#benchmarks) than popular alternatives, with HTTP, headless Chrome, and WebDriver rendering in a single library.

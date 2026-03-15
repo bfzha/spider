@@ -1,0 +1,137 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library", "rust_test")
+load("@crates//:defs.bzl", "aliases", "all_crate_deps")
+load("//bazel:features.bzl", "SPIDER_AGENT_WORKSPACE_FEATURES")
+
+SPIDER_AGENT_EXAMPLES = [
+    "basic_search",
+    "concurrent",
+    "extract",
+    "extraction",
+    "multimodal",
+    "open_page_concurrent",
+    "research",
+    "spider_cloud_ecommerce_competitor",
+    "spider_cloud_end_to_end",
+    "spider_cloud_jobs_pipeline",
+    "spider_cloud_prompt_flows",
+]
+
+SPIDER_AGENT_TESTS = [
+    "action_feedback_integration",
+    "live_env_smoke",
+    "live_spider_cloud",
+    "thinking_integration",
+]
+
+# crate_universe only materializes unconditional workspace-member deps for this
+# crate. We enable a wider feature set in Bazel, so the corresponding optional
+# deps must be added explicitly here.
+SPIDER_AGENT_FEATURE_DEPS = [
+    "@crates//:chromey-2.40.0",
+    "@crates//:spider_skills-0.1.7",
+]
+
+rust_library(
+    name = "spider_agent_workspace",
+    srcs = glob(["src/**/*.rs"]),
+    aliases = aliases(
+        normal = True,
+        proc_macro = True,
+    ),
+    crate_features = SPIDER_AGENT_WORKSPACE_FEATURES,
+    crate_name = "spider_agent",
+    deps = all_crate_deps(normal = True) + SPIDER_AGENT_FEATURE_DEPS + [
+        "@crates//:futures-0.3.32",
+        "//spider_agent_html:spider_agent_html",
+        "//spider_agent_types:spider_agent_types",
+    ],
+    edition = "2021",
+    proc_macro_deps = all_crate_deps(proc_macro = True),
+    version = "2.47.22",
+)
+
+rust_test(
+    name = "spider_agent_unit_test",
+    crate = ":spider_agent_workspace",
+    aliases = aliases(
+        normal = True,
+        normal_dev = True,
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
+    crate_features = SPIDER_AGENT_WORKSPACE_FEATURES,
+    deps = all_crate_deps(
+        normal = True,
+        normal_dev = True,
+    ) + SPIDER_AGENT_FEATURE_DEPS + [
+        "//spider_agent_html:spider_agent_html",
+        "//spider_agent_types:spider_agent_types",
+    ],
+    edition = "2021",
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+        proc_macro_dev = True,
+    ),
+    version = "2.47.22",
+)
+
+_spider_agent_examples = [
+    rust_binary(
+        name = example_name,
+        srcs = ["examples/%s.rs" % example_name],
+        aliases = aliases(
+            normal = True,
+            normal_dev = True,
+            proc_macro = True,
+            proc_macro_dev = True,
+        ),
+        crate_root = "examples/%s.rs" % example_name,
+        deps = all_crate_deps(
+            normal = True,
+            normal_dev = True,
+        ) + SPIDER_AGENT_FEATURE_DEPS + [
+            ":spider_agent_workspace",
+            "//spider_agent_html:spider_agent_html",
+            "//spider_agent_types:spider_agent_types",
+        ],
+        edition = "2021",
+        proc_macro_deps = all_crate_deps(
+            proc_macro = True,
+            proc_macro_dev = True,
+        ),
+        version = "2.47.22",
+    )
+    for example_name in SPIDER_AGENT_EXAMPLES
+]
+
+_spider_agent_tests = [
+    rust_test(
+        name = test_name,
+        srcs = ["tests/%s.rs" % test_name],
+        aliases = aliases(
+            normal = True,
+            normal_dev = True,
+            proc_macro = True,
+            proc_macro_dev = True,
+        ),
+        crate_features = SPIDER_AGENT_WORKSPACE_FEATURES,
+        crate_root = "tests/%s.rs" % test_name,
+        deps = all_crate_deps(
+            normal = True,
+            normal_dev = True,
+        ) + SPIDER_AGENT_FEATURE_DEPS + [
+            ":spider_agent_workspace",
+            "//spider_agent_html:spider_agent_html",
+            "//spider_agent_types:spider_agent_types",
+        ],
+        edition = "2021",
+        proc_macro_deps = all_crate_deps(
+            proc_macro = True,
+            proc_macro_dev = True,
+        ),
+        version = "2.47.22",
+    )
+    for test_name in SPIDER_AGENT_TESTS
+]

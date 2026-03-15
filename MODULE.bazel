@@ -2,3 +2,42 @@ module(
     name = "spider",
     version = "0.0.1",
 )
+
+bazel_dep(name = "rules_rust", version = "0.69.0")
+
+RUST_EDITION = "2021"
+RUST_VERSION = "1.94.0"
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = RUST_EDITION,
+    versions = [RUST_VERSION],
+)
+use_repo(rust, "rust_toolchains")
+register_toolchains("@rust_toolchains//:all")
+
+crate = use_extension("@rules_rust//crate_universe:extensions.bzl", "crate")
+crate.spec(
+    package = "spider_skills",
+    version = "=0.1.7",
+)
+crate.from_cargo(
+    name = "crates",
+    cargo_lockfile = "//:Cargo.lock",
+    manifests = ["//:Cargo.toml"],
+)
+crate.annotation(
+    crate = "aws-lc-sys",
+    version = "0.38.0",
+    build_script_env = {
+        # aws-lc-sys needs to control the optimization level for jitterentropy itself.
+        # rules_rust appends CFLAGS-like vars instead of replacing them, so the only
+        # reliable way to beat the toolchain's trailing -O2 is to append our own -O0.
+        "AWS_LC_SYS_CFLAGS": "-O0",
+        "AWS_LC_SYS_CFLAGS_x86_64_unknown_linux_gnu": "-O0",
+        "CFLAGS": "-O0",
+        "CFLAGS_x86_64_unknown_linux_gnu": "-O0",
+        "HOST_CFLAGS": "-O0",
+    },
+)
+use_repo(crate, "crates")

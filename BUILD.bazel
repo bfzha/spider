@@ -1,50 +1,13 @@
 package(default_visibility = ["//visibility:public"])
 
-filegroup(
-    name = "cargo_manifest",
-    srcs = ["Cargo.toml"],
-)
-
-filegroup(
-    name = "cargo_workspace_srcs",
-    srcs = glob([
-        "Cargo.toml",
-        "Cargo.lock",
-        ".cargo/**",
-        "benches/**",
-        "examples/**",
-        "spider/**",
-        "spider_agent/**",
-        "spider_agent_html/**",
-        "spider_agent_types/**",
-        "spider_cli/**",
-        "spider_utils/**",
-        "spider_worker/**",
-    ]),
-)
-
-genrule(
+alias(
     name = "spider_cli_release",
-    srcs = [
-        ":cargo_manifest",
-        ":cargo_workspace_srcs",
-    ],
-    outs = ["spider"],
-    tools = ["tools/bazel/cargo_release_binary.sh"],
-    local = True,
-    cmd = "$(location tools/bazel/cargo_release_binary.sh) $(location :cargo_manifest) spider_cli spider $@",
+    actual = "//spider_cli:spider",
 )
 
-genrule(
+alias(
     name = "spider_worker_release",
-    srcs = [
-        ":cargo_manifest",
-        ":cargo_workspace_srcs",
-    ],
-    outs = ["spider_worker"],
-    tools = ["tools/bazel/cargo_release_binary.sh"],
-    local = True,
-    cmd = "$(location tools/bazel/cargo_release_binary.sh) $(location :cargo_manifest) spider_worker spider_worker $@",
+    actual = "//spider_worker:spider_worker",
 )
 
 genrule(
