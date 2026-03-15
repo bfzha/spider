@@ -1,0 +1,71 @@
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "cargo_manifest",
+    srcs = ["Cargo.toml"],
+)
+
+filegroup(
+    name = "cargo_workspace_srcs",
+    srcs = glob([
+        "Cargo.toml",
+        "Cargo.lock",
+        ".cargo/**",
+        "benches/**",
+        "examples/**",
+        "spider/**",
+        "spider_agent/**",
+        "spider_agent_html/**",
+        "spider_agent_types/**",
+        "spider_cli/**",
+        "spider_utils/**",
+        "spider_worker/**",
+    ]),
+)
+
+genrule(
+    name = "spider_cli_release",
+    srcs = [
+        ":cargo_manifest",
+        ":cargo_workspace_srcs",
+    ],
+    outs = ["spider"],
+    tools = ["tools/bazel/cargo_release_binary.sh"],
+    local = True,
+    cmd = "$(location tools/bazel/cargo_release_binary.sh) $(location :cargo_manifest) spider_cli spider $@",
+)
+
+genrule(
+    name = "spider_worker_release",
+    srcs = [
+        ":cargo_manifest",
+        ":cargo_workspace_srcs",
+    ],
+    outs = ["spider_worker"],
+    tools = ["tools/bazel/cargo_release_binary.sh"],
+    local = True,
+    cmd = "$(location tools/bazel/cargo_release_binary.sh) $(location :cargo_manifest) spider_worker spider_worker $@",
+)
+
+genrule(
+    name = "spider_release_archive",
+    srcs = [
+        ":spider_cli_release",
+        ":spider_worker_release",
+        "LICENSE",
+        "README.md",
+    ],
+    outs = ["spider_release.tar.gz"],
+    cmd = """
+set -euo pipefail
+pkg_root="$(@D)/package_root"
+rm -rf "$$pkg_root"
+mkdir -p "$$pkg_root/bin" "$$pkg_root/share/doc/spider"
+cp "$(location :spider_cli_release)" "$$pkg_root/bin/spider"
+cp "$(location :spider_worker_release)" "$$pkg_root/bin/spider_worker"
+cp "$(location LICENSE)" "$$pkg_root/share/doc/spider/LICENSE"
+cp "$(location README.md)" "$$pkg_root/share/doc/spider/README.md"
+chmod 0755 "$$pkg_root/bin/spider" "$$pkg_root/bin/spider_worker"
+tar -C "$$pkg_root" -czf "$@" .
+""",
+)

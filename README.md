@@ -223,6 +223,32 @@ let mut website = Website::new("https://protected-site.com")
 - [Benchmarks](./benches/BENCHMARKS.md)
 - [Changelog](CHANGELOG.md)
 
+## Bazel
+
+This repository includes Bazel entrypoints for release builds and packaging.
+
+Requirements:
+
+- `bazel` or `bazelisk`
+- `cargo` and a working Rust toolchain on `PATH`
+
+Targets:
+
+- `bazel build //:spider_cli_release`
+- `bazel build //:spider_worker_release`
+- `bazel build //:spider_release_archive`
+
+Behavior:
+
+- Bazel is the top-level build driver.
+- Release binaries are produced by invoking the existing Cargo workspace from Bazel.
+- `//:spider_release_archive` creates a `tar.gz` containing `bin/spider`, `bin/spider_worker`, `README.md`, and `LICENSE`.
+
+Notes:
+
+- The current Bazel integration is a transition layer around the existing Cargo workspace so packaging can be standardized immediately.
+- Outputs are built with `cargo build --release --locked`.
+
 ## Contributing
 
 Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup and guidelines.
