@@ -13,3 +13,5 @@ result-*
 example.png
 .idea
 scripts/
+*.sh
+.cargo/
